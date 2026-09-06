@@ -45,13 +45,10 @@ export default function Home() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-12">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">easyparse-cv</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Upload a CV PDF to extract personal info, experience, education, certifications, and
-          skills - entirely locally, no third-party services.
-        </p>
-      </header>
+      <p className="text-base text-muted-foreground">
+        Drop in a CV PDF and get personal info, experience, education, certifications, and skills
+        back - entirely locally, no third-party services.
+      </p>
 
       <CvUploadForm
         isLoading={state.status === "loading"}
