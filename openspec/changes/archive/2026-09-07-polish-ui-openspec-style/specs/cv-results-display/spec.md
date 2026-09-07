@@ -1,8 +1,4 @@
-## Purpose
-
-Presents a single-page interface for uploading a CV PDF and viewing the extracted data as clearly labeled, color-accented sections, including honest handling of missing, low-confidence, or failed extraction.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: File Upload Interface
 The system SHALL present a single-page interface with a drag-and-drop dropzone for selecting one PDF file, which also supports clicking to browse and choose a file, plus a control to trigger parsing once a file is selected. While the upload and parse are in progress, the system SHALL replace the parse control with an animated "Parsing file..." indicator, synced exactly with the request's lifetime (no artificial minimum display duration).
@@ -41,35 +37,3 @@ The system SHALL render each returned section (Personal Info, Experience, Educat
 #### Scenario: User expands a previously collapsed section
 - **WHEN** a user activates a collapsed section's header while another section is expanded
 - **THEN** that section's content becomes visible and the previously expanded section collapses, so only the newly activated section is expanded
-
-### Requirement: Empty Section Handling
-The system SHALL display an explicit empty-state indication for any section with no extracted content, rather than leaving a blank or missing region.
-
-#### Scenario: CV with no certifications
-- **WHEN** the response's certifications list is empty
-- **THEN** the Certifications section displays a message indicating none were found, rather than blank space
-
-### Requirement: Warning Display
-The system SHALL visibly surface any warnings included in the response, associated with the section they describe, distinguishable from normally parsed data.
-
-#### Scenario: Response includes a low-confidence warning
-- **WHEN** the response contains a warning about a section that could not be confidently split into entries
-- **THEN** the corresponding section displays that warning near its content
-
-### Requirement: Raw Fallback Display
-The system SHALL display an entry's or section's raw text when its structured fields are absent, so no successfully extracted content is hidden from the user.
-
-#### Scenario: Entry with unparsed structured fields
-- **WHEN** a returned entry has null/absent structured fields but non-empty raw text
-- **THEN** the UI displays the raw text for that entry instead of showing it empty
-
-### Requirement: Upload and Processing Error Display
-The system SHALL show a clear, specific error message when the upload or parse request fails, distinguishing at least invalid file type, oversized file, no text layer found, and general processing failure.
-
-#### Scenario: User uploads a scanned PDF
-- **WHEN** the parse request fails because the PDF has no extractable text layer
-- **THEN** the UI displays a message specifically indicating that scanned/image-only PDFs are not supported, rather than a generic error
-
-#### Scenario: User uploads a non-PDF file
-- **WHEN** the parse request fails because the uploaded file is not a PDF
-- **THEN** the UI displays a message specifically indicating that only PDF files are supported

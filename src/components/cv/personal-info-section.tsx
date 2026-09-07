@@ -12,7 +12,15 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function PersonalInfoSection({ personalInfo }: { personalInfo: PersonalInfo }) {
+export function PersonalInfoSection({
+  personalInfo,
+  open,
+  onOpenChange,
+}: {
+  personalInfo: PersonalInfo;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const rows: { label: string; value: string }[] = [
     ...(personalInfo.fullName ? [{ label: "Name", value: personalInfo.fullName }] : []),
     ...(personalInfo.email ? [{ label: "Email", value: personalInfo.email }] : []),
@@ -28,9 +36,11 @@ export function PersonalInfoSection({ personalInfo }: { personalInfo: PersonalIn
   return (
     <SectionCard
       title="Personal Info"
-      accentClassName="border-l-violet-500"
+      accentClassName="bg-violet-500"
       isEmpty={rows.length === 0}
       emptyMessage="No personal information was found."
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <dl className="grid gap-3 text-sm sm:grid-cols-2">
         {rows.map((row, index) => (

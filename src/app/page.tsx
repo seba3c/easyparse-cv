@@ -57,7 +57,9 @@ export default function Home() {
       />
 
       {state.status === "error" && <ErrorBanner code={state.code} message={state.message} />}
-      {state.status === "success" && <CvResultView result={state.result} />}
+      {state.status === "success" && (
+        <CvResultView key={state.result.hash} result={state.result} />
+      )}
     </div>
   );
 }

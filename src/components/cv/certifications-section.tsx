@@ -24,13 +24,23 @@ function CertificationEntryView({ entry }: { entry: CertificationEntry }) {
   );
 }
 
-export function CertificationsSection({ entries }: { entries: readonly CertificationEntry[] }) {
+export function CertificationsSection({
+  entries,
+  open,
+  onOpenChange,
+}: {
+  entries: readonly CertificationEntry[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   return (
     <SectionCard
       title="Certifications"
-      accentClassName="border-l-amber-500"
+      accentClassName="bg-amber-500"
       isEmpty={entries.length === 0}
       emptyMessage="No certifications were found."
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <div className="space-y-3">
         {entries.map((entry, index) => (

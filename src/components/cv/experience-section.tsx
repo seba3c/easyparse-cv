@@ -41,16 +41,22 @@ function ExperienceEntryView({ entry }: { entry: ExperienceEntry }) {
 export function ExperienceSection({
   entries,
   warning,
+  open,
+  onOpenChange,
 }: {
   entries: readonly ExperienceEntry[];
   warning?: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   return (
     <SectionCard
       title="Experience"
-      accentClassName="border-l-blue-500"
+      accentClassName="bg-blue-500"
       isEmpty={entries.length === 0}
       emptyMessage="No experience entries were found."
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <div className="space-y-4">
         {warning && (

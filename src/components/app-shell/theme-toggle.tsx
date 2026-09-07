@@ -31,18 +31,18 @@ export function ThemeToggle() {
       onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className={cn(
-        "relative inline-flex h-8 w-14 shrink-0 cursor-pointer items-center rounded-full border border-border bg-muted transition-colors",
+        "relative inline-flex h-6 w-9 shrink-0 cursor-pointer items-center rounded-full border border-border bg-muted transition-colors",
         "data-[checked]:bg-primary",
         "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
       )}
     >
       <Switch.Thumb
         className={cn(
-          "flex size-6 translate-x-1 items-center justify-center rounded-full bg-background text-foreground shadow-sm transition-transform",
-          "data-[checked]:translate-x-7 data-[checked]:bg-primary-foreground data-[checked]:text-primary",
+          "flex size-5 translate-x-0.5 items-center justify-center rounded-full bg-background text-foreground shadow-sm transition-transform",
+          "data-[checked]:translate-x-3.5 data-[checked]:bg-primary-foreground data-[checked]:text-primary",
         )}
       >
-        {isDark ? <Moon className="size-3.5" /> : <Sun className="size-3.5" />}
+        {isDark ? <Moon className="size-3" /> : <Sun className="size-3" />}
       </Switch.Thumb>
     </Switch.Root>
   );
