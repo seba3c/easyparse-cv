@@ -112,24 +112,25 @@ export function CvUploadForm({
           tabIndex={-1}
         />
       </div>
-      {isLoading ? (
-        <p
-          role="status"
-          aria-live="polite"
-          className="animate-pulse self-center text-sm font-medium text-muted-foreground"
-        >
-          Parsing file...
+      <div className="flex items-center justify-between gap-4">
+        <p className="min-w-0 flex-1 text-xs text-muted-foreground">
+          Your CV is processed in memory for this request only and is never stored, logged, or
+          shared with any third party.
         </p>
-      ) : (
-        <Button
-          type="button"
-          onClick={handleParseClick}
-          disabled={!selectedFile}
-          className="self-center"
-        >
-          Parse CV
-        </Button>
-      )}
+        {isLoading ? (
+          <p
+            role="status"
+            aria-live="polite"
+            className="animate-pulse shrink-0 text-sm font-medium text-muted-foreground"
+          >
+            Parsing file...
+          </p>
+        ) : (
+          <Button type="button" onClick={handleParseClick} disabled={!selectedFile} className="shrink-0">
+            Parse CV
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
