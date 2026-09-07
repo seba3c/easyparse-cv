@@ -40,8 +40,10 @@ export class ParseCvUseCase {
     const educationResult = parseEducationSection(segmented.sections.education);
     const certificationsResult = parseCertificationsSection(segmented.sections.certifications);
     const skills = parseSkillsSection(segmented.sections.skills);
+    const summaryText = segmented.sections.summary.join("\n").trim();
+    const summary = summaryText.length > 0 ? summaryText : null;
 
-    const warnings = [experienceResult.warning, educationResult.warning].filter(
+    const warnings = [experienceResult.warning, educationResult.warning, segmented.warning].filter(
       (warning): warning is string => warning !== null,
     );
 
@@ -49,6 +51,7 @@ export class ParseCvUseCase {
       hash,
       fileName: input.fileName,
       personalInfo,
+      summary,
       experience: experienceResult.entries,
       education: educationResult.entries,
       certifications: certificationsResult.entries,

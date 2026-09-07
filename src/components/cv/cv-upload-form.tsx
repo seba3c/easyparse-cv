@@ -75,6 +75,10 @@ export function CvUploadForm({
     if (selectedFile) onSubmit(selectedFile);
   }
 
+  function handleClearClick() {
+    setSelectedFile(null);
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div
@@ -126,9 +130,16 @@ export function CvUploadForm({
             Parsing file...
           </p>
         ) : (
-          <Button type="button" onClick={handleParseClick} disabled={!selectedFile} className="shrink-0">
-            Parse CV
-          </Button>
+          <div className="flex shrink-0 items-center gap-2">
+            {selectedFile && (
+              <Button type="button" variant="link" onClick={handleClearClick} className="text-xs">
+                Clear
+              </Button>
+            )}
+            <Button type="button" onClick={handleParseClick} disabled={!selectedFile}>
+              Parse CV
+            </Button>
+          </div>
         )}
       </div>
     </div>

@@ -91,7 +91,7 @@ describe("CertificationEntry", () => {
 });
 
 describe("ParsedCvResult", () => {
-  it("defaults list fields to empty arrays", () => {
+  it("defaults list fields to empty arrays and summary to null", () => {
     const result = createParsedCvResult({
       hash: createFileHash(VALID_HASH),
       fileName: "cv.pdf",
@@ -102,6 +102,17 @@ describe("ParsedCvResult", () => {
     expect(result.certifications).toEqual([]);
     expect(result.skills).toEqual([]);
     expect(result.warnings).toEqual([]);
+    expect(result.summary).toBeNull();
+  });
+
+  it("preserves a provided summary", () => {
+    const result = createParsedCvResult({
+      hash: createFileHash(VALID_HASH),
+      fileName: "cv.pdf",
+      personalInfo: createPersonalInfo(),
+      summary: "Backend engineer focused on distributed systems.",
+    });
+    expect(result.summary).toBe("Backend engineer focused on distributed systems.");
   });
 
   it("rejects an empty fileName", () => {

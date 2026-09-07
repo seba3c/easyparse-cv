@@ -67,6 +67,78 @@ describe("ParseCvUseCase", () => {
     expect(result.warnings[0]).toMatch(/could not confidently split/i);
   });
 
+  it("extracts a Summary section without leaking it into personal info", async () => {
+    const lines = [
+      "Jane Doe",
+      "jane.doe@example.com",
+      "Summary",
+      "Backend engineer with 10+ years of experience.",
+      "Looking to contribute in a senior engineering role.",
+      "Experience",
+      "Senior Engineer at Acme",
+      "Jan 2021 - Present",
+    ];
+
+    const useCase = new ParseCvUseCase(fakeExtractor(lines), fakeHasher());
+    const result = await useCase.execute({ fileBytes: Buffer.from("irrelevant"), fileName: "cv.pdf" });
+
+    expect(result.summary).toBe(
+      "Backend engineer with 10+ years of experience.\nLooking to contribute in a senior engineering role.",
+    );
+    expect(result.personalInfo.fullName).toBe("Jane Doe");
+  });
+
+  it("returns null summary when no Summary section is present", async () => {
+    const lines = ["Jane Doe", "Experience", "Senior Engineer at Acme", "Jan 2021 - Present"];
+    const useCase = new ParseCvUseCase(fakeExtractor(lines), fakeHasher());
+    const result = await useCase.execute({ fileBytes: Buffer.from("irrelevant"), fileName: "cv.pdf" });
+
+    expect(result.summary).toBeNull();
+  });
+
+  it("includes a low-confidence segmentation warning for concatenated all-caps headers", async () => {
+    const lines = ["PAOLA CANTOYA", "CONTACTO EXPERIENCIA PROFESIONAL", "2022-2025", "Gerente"];
+    const useCase = new ParseCvUseCase(fakeExtractor(lines), fakeHasher());
+    const result = await useCase.execute({ fileBytes: Buffer.from("irrelevant"), fileName: "cv.pdf" });
+
+    expect(result.warnings.some((warning) => /section boundaries may be unreliable/i.test(warning))).toBe(
+      true,
+    );
+  });
+
+  // Full-pipeline regression modeled on a real Spanish CV's structural shape
+  // (multiple employers, a "Herramientas" skills header, and a "Logros y
+  // Distinciones" achievements header) - see design.md - Test data policy.
+  // Name/email/phone/employers below are fabricated.
+  it("parses a multi-employer Spanish CV without achievements bleeding into Education and with Herramientas mapped to Skills", async () => {
+    const lines = [
+      "ELENA MARCHETTI",
+      "elena.marchetti.arq@example.com +34600111222",
+      "Experiencia Laboral",
+      "BIM Coordinator en Estudio Delta BIM",
+      "Ene 2023 - Actualidad",
+      "Arquitecta en Constructora Nuevo Horizonte",
+      "Mar 2020 - Dic 2022",
+      "Educación",
+      "Máster en Gestión BIM, Universidad Politécnica Ejemplo",
+      "2019 - 2020",
+      "Logros y Distinciones",
+      "Mejor promedio de egreso - Facultad de Arquitectura Ejemplo",
+      "Herramientas",
+      "Revit, AutoCAD, Navisworks",
+    ];
+
+    const useCase = new ParseCvUseCase(fakeExtractor(lines), fakeHasher());
+    const result = await useCase.execute({ fileBytes: Buffer.from("irrelevant"), fileName: "cv.pdf" });
+
+    expect(result.experience).toHaveLength(2);
+    expect(result.education).toHaveLength(1);
+    expect(result.education[0].raw).not.toContain("Mejor promedio de egreso");
+    expect(result.skills).toEqual(["Revit", "AutoCAD", "Navisworks"]);
+    expect(result.personalInfo.fullName).toBe("ELENA MARCHETTI");
+    expect(result.personalInfo.email).toBe("elena.marchetti.arq@example.com");
+  });
+
   it("propagates NoTextLayerError from the extractor for scanned/no-text PDFs", async () => {
     const useCase = new ParseCvUseCase(fakeExtractorThatThrows(new NoTextLayerError()), fakeHasher());
 

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { extractPersonalInfo } from "./personal-info-extractor";
+import { segmentCv } from "./section-segmenter";
 
 describe("extractPersonalInfo", () => {
   it("extracts name, email, and phone from the pre-header block", () => {
@@ -47,5 +48,32 @@ describe("extractPersonalInfo", () => {
     const result = extractPersonalInfo({ allLines: personalInfoLines, personalInfoLines });
 
     expect(result.location).toBe("Berlin, Germany");
+  });
+
+  // Regression case modeled on a real Spanish CV's structural shape (a
+  // Summary/Perfil Profesional block followed by an achievements header) -
+  // see design.md - Test data policy. Fabricated name/email/phone only.
+  it("does not let Summary or achievements content pollute name/email/phone extraction", () => {
+    const allLines = [
+      "ELENA MARCHETTI",
+      "Valencia, España",
+      "elena.marchetti.arq@example.com +34600111222",
+      "Perfil Profesional",
+      "Arquitecta especializada en coordinación BIM con experiencia en proyectos de edificación.",
+      "Experiencia Laboral",
+      "BIM Coordinator",
+      "Educación",
+      "Máster en Gestión BIM",
+      "Logros y Distinciones",
+      "Mejor promedio de egreso - Facultad de Arquitectura Ejemplo",
+    ];
+    const segmented = segmentCv(allLines);
+
+    const result = extractPersonalInfo({ allLines, personalInfoLines: segmented.personalInfoLines });
+
+    expect(result.fullName).toBe("ELENA MARCHETTI");
+    expect(result.email).toBe("elena.marchetti.arq@example.com");
+    expect(result.phone).toBe("+34600111222");
+    expect(result.location).toBe("Valencia, España");
   });
 });

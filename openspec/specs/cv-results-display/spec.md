@@ -28,7 +28,7 @@ The system SHALL present a single-page interface with a drag-and-drop dropzone f
 - **THEN** the dropzone indicates it is ready to accept the drop without asserting the file is valid, and the existing file type/size validation still runs once the file is dropped or selected
 
 ### Requirement: Parsed Section Rendering
-The system SHALL render each returned section (Personal Info, Experience, Education, Certifications, Skills) on the same page as the upload control, each with a visually distinct accent color, after a successful parse. Only one section SHALL be expanded at a time: immediately after a parse completes, the first section (Personal Info) SHALL be expanded and all others collapsed, and expanding any collapsed section SHALL collapse whichever section was previously expanded.
+The system SHALL render each returned section (Personal Info, Summary, Experience, Education, Certifications, Skills) on the same page as the upload control, each with a visually distinct accent color, after a successful parse. Only one section SHALL be expanded at a time: immediately after a parse completes, the first section (Personal Info) SHALL be expanded and all others collapsed, and expanding any collapsed section SHALL collapse whichever section was previously expanded.
 
 #### Scenario: Successful parse response received
 - **WHEN** the upload completes and a structured response is returned
@@ -42,6 +42,10 @@ The system SHALL render each returned section (Personal Info, Experience, Educat
 - **WHEN** a user activates a collapsed section's header while another section is expanded
 - **THEN** that section's content becomes visible and the previously expanded section collapses, so only the newly activated section is expanded
 
+#### Scenario: CV with a Summary
+- **WHEN** the response's `summary` field is non-null
+- **THEN** the Summary section displays that text
+
 ### Requirement: Empty Section Handling
 The system SHALL display an explicit empty-state indication for any section with no extracted content, rather than leaving a blank or missing region.
 
@@ -50,11 +54,15 @@ The system SHALL display an explicit empty-state indication for any section with
 - **THEN** the Certifications section displays a message indicating none were found, rather than blank space
 
 ### Requirement: Warning Display
-The system SHALL visibly surface any warnings included in the response, associated with the section they describe, distinguishable from normally parsed data.
+The system SHALL visibly surface any warnings included in the response. A warning tied to a specific section (e.g. a low-confidence entry split) SHALL be displayed near that section's content; a warning not tied to any single section (e.g. a document-wide low-confidence segmentation warning) SHALL be displayed in a general notice near the top of the results, distinguishable from section-specific warnings.
 
 #### Scenario: Response includes a low-confidence warning
 - **WHEN** the response contains a warning about a section that could not be confidently split into entries
 - **THEN** the corresponding section displays that warning near its content
+
+#### Scenario: Response includes a document-wide segmentation warning
+- **WHEN** the response contains a warning that is not associated with any single section (e.g. section boundaries may be unreliable for the whole document)
+- **THEN** the UI displays that warning in a general notice near the top of the results, rather than attaching it to one section
 
 ### Requirement: Raw Fallback Display
 The system SHALL display an entry's or section's raw text when its structured fields are absent, so no successfully extracted content is hidden from the user.

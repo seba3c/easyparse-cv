@@ -8,6 +8,7 @@ export interface ParsedCvResult {
   readonly hash: FileHash;
   readonly fileName: string;
   readonly personalInfo: PersonalInfo;
+  readonly summary: string | null;
   readonly experience: readonly ExperienceEntry[];
   readonly education: readonly EducationEntry[];
   readonly certifications: readonly CertificationEntry[];
@@ -19,6 +20,7 @@ export function createParsedCvResult(params: {
   hash: FileHash;
   fileName: string;
   personalInfo: PersonalInfo;
+  summary?: string | null;
   experience?: readonly ExperienceEntry[];
   education?: readonly EducationEntry[];
   certifications?: readonly CertificationEntry[];
@@ -32,6 +34,7 @@ export function createParsedCvResult(params: {
     hash: params.hash,
     fileName: params.fileName,
     personalInfo: params.personalInfo,
+    summary: params.summary ?? null,
     experience: params.experience ?? [],
     education: params.education ?? [],
     certifications: params.certifications ?? [],

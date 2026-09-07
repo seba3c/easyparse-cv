@@ -1,6 +1,6 @@
 import type { EducationEntry } from "@/domain/value-objects/education-entry";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SectionCard } from "./section-card";
+import { WarningAlert } from "./warning-alert";
 
 function EducationEntryView({ entry }: { entry: EducationEntry }) {
   const isUnstructured = !entry.degree && !entry.institution;
@@ -59,11 +59,7 @@ export function EducationSection({
       onOpenChange={onOpenChange}
     >
       <div className="space-y-4">
-        {warning && (
-          <Alert>
-            <AlertDescription>{warning}</AlertDescription>
-          </Alert>
-        )}
+        {warning && <WarningAlert message={warning} />}
         {entries.map((entry, index) => (
           <EducationEntryView key={index} entry={entry} />
         ))}
