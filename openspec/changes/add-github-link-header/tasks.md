@@ -1,0 +1,6 @@
+## 1. Header GitHub Link
+
+- [x] 1.1 In `src/components/app-shell/site-header.tsx`, add a "GitHub" link (`<a href="https://github.com/seba3c/easyparse-cv" target="_blank" rel="noopener noreferrer">`) inside the header's flex row, placed immediately before `<ThemeToggle />` — verify by reading the JSX that the link element precedes `<ThemeToggle />` in source order within the same flex container.
+- [x] 1.2 Style the link with Tailwind utility classes to match the header's existing muted/hover-brighten text treatment, using a small `ArrowUpRight` external-link glyph from `lucide-react` alongside the "GitHub" text label (matching openspec.dev's "DOCS ↗" pattern more closely than a brand icon), sized consistently with the adjacent theme toggle icons — verify visually in the browser that the link's color, size, and hover state look consistent with the rest of the header.
+- [x] 1.3 Run the app locally (`npm run dev` or equivalent) and confirm in the browser that the "GitHub" link appears on the same row as the theme switcher, positioned to its left, and that clicking it opens `https://github.com/seba3c/easyparse-cv` in a new tab while the app tab stays open.
+- [x] 1.4 Check the header at mobile/narrow viewport widths and confirm the GitHub link and theme switcher remain on one line without overlapping or wrapping awkwardly.
