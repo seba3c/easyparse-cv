@@ -1,12 +1,22 @@
 import { SectionCard } from "./section-card";
 
-export function SkillsSection({ skills }: { skills: readonly string[] }) {
+export function SkillsSection({
+  skills,
+  open,
+  onOpenChange,
+}: {
+  skills: readonly string[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   return (
     <SectionCard
       title="Skills"
-      accentClassName="border-l-pink-500"
+      accentClassName="bg-pink-500"
       isEmpty={skills.length === 0}
       emptyMessage="No skills were found."
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <div className="flex flex-wrap gap-2">
         {skills.map((skill) => (

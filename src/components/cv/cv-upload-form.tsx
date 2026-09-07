@@ -112,14 +112,24 @@ export function CvUploadForm({
           tabIndex={-1}
         />
       </div>
-      <Button
-        type="button"
-        onClick={handleParseClick}
-        disabled={!selectedFile || isLoading}
-        className="self-start"
-      >
-        {isLoading ? "Parsing..." : "Parse CV"}
-      </Button>
+      {isLoading ? (
+        <p
+          role="status"
+          aria-live="polite"
+          className="animate-pulse self-center text-sm font-medium text-muted-foreground"
+        >
+          Parsing file...
+        </p>
+      ) : (
+        <Button
+          type="button"
+          onClick={handleParseClick}
+          disabled={!selectedFile}
+          className="self-center"
+        >
+          Parse CV
+        </Button>
+      )}
     </div>
   );
 }

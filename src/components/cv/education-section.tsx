@@ -41,16 +41,22 @@ function EducationEntryView({ entry }: { entry: EducationEntry }) {
 export function EducationSection({
   entries,
   warning,
+  open,
+  onOpenChange,
 }: {
   entries: readonly EducationEntry[];
   warning?: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   return (
     <SectionCard
       title="Education"
-      accentClassName="border-l-emerald-500"
+      accentClassName="bg-emerald-500"
       isEmpty={entries.length === 0}
       emptyMessage="No education entries were found."
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <div className="space-y-4">
         {warning && (
